@@ -26,9 +26,26 @@ def main():
         return
 
     # Queries data based on the three questions asked
-    # cass_db.show_query_1(session_id=338, item_in_session=4)
-    cass_db.show_query_2(user_id=10, session_id=182)
-    # cass_db.show_query_3()
+    try:
+        result_1 = cass_db.exec_query(1, (338, 4))
+        result_2 = cass_db.exec_query(2, (10, 182))
+        # result_2 = cass_db.exec_query(2, (10, 9)) # teste
+        result_3 = cass_db.exec_query(3, ('Pump It'))
+
+        print('Showing results for query 1:')
+        for row in result_1:
+            print(row.artist, row.song_title, row.song_length)
+
+        print('\nShowing results for query 2:')
+        for row in result_2:
+            print(row.artist, row.song_title)
+        
+        print('\nShowing results for query 3:')
+        for row in result_3:
+            print(row.first_name, row.last_name)
+
+    except Exception as e:
+        print('Error on querying data on database. ' + str(e))
 
     cass_db.close_session()
 

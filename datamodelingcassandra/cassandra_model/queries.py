@@ -79,9 +79,42 @@ QUERY_INSERT_2 = """
     VALUES (%s, %s, %s, %s, %s, %s, %s)
 """
 
+# -----------------------------------------------------------------------------------------------
+# 3. Give me every user name (first and last) in my music app history
+# who listened to the song 'All Hands Against His Own'
 
-# DROPING TABLES
-QUERY_DROP_ALL_TABLES = """
-    DROP TABLE music_history_by_artist_and_song_data;
-    DROP TABLE music_history_by_user_and_session;
+QUERY_SELECT_3 = """
+    SELECT
+        first_name
+        ,last_name
+    FROM
+        music_history_by_song_title
+    WHERE
+        song_title = %s
 """
+
+QUERY_CREATE_3 = """
+    CREATE TABLE IF NOT EXISTS music_history_by_song_title
+    (
+        first_name text
+        ,last_name text
+        ,song_title text
+        ,PRIMARY KEY (song_title)
+    )
+"""
+
+QUERY_INSERT_3 = """
+    INSERT INTO music_history_by_song_title
+    (
+        first_name
+        ,last_name
+        ,song_title
+    )
+    VALUES (%s, %s, %s)
+"""
+
+# -----------------------------------------------------------------------------------------------
+# DROPING TABLES
+QUERY_DROP_TABLE_1 = "DROP TABLE music_history_by_artist_and_song_data"
+QUERY_DROP_TABLE_2 = "DROP TABLE music_history_by_user_and_session"
+QUERY_DROP_TABLE_3 = "DROP TABLE music_history_by_song_title"

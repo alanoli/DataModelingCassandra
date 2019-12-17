@@ -5,64 +5,54 @@ import csv
 
 
 class CassandraModel:
-    """ """
+    """
+    Defines an object of a cluster in Cassandra, opening the session for interaction
+    with the database. Also, it manages the query and table modeling on this instance.
+    At the end, remember calling the close_session() method.
+    """
     def __init__(self, input_file, server_instance='127.0.0.1', keyspace_name='udacity'):
         self.key_space_name = keyspace_name
         self.file = input_file
 
-        self.cluster = self._create_cluster()
+        self.cluster = self._create_cluster(server_instance)
         self.session = self._open_session()
         self._create_keyspace()
-        # self._model_query_1()
-        self._model_query_2()
-        # self._model_query_3()
 
-    def _model_query_1(self):
-        """ """
+        # Modeling the tables requested
+        self._model_table(QUERY_CREATE_1, QUERY_INSERT_1, parameters=[0, 9, 5, 8, 3])
+        self._model_table(QUERY_CREATE_2, QUERY_INSERT_2, parameters=[0, 9, 8, 10, 1, 4, 3])
+        self._model_table(QUERY_CREATE_3, QUERY_INSERT_3, parameters=[1, 4, 9])
+
+    def _model_table(self, create_table_query, insert_query, parameters):
+        """Creates the table modeled by the query requested using the CREATE table statement"""
         try:
-            self.session.execute(QUERY_CREATE_1)
-            self._insert_data(QUERY_INSERT_1, [0, 9, 5, 8, 3])
+            self.session.execute(create_table_query)
+            self._insert_data(insert_query, parameters)
         except Exception as e:
-            print('Error on creating table for query 1. ' + str(e))
-    
-    def _model_query_2(self):
-        """ """
+            print('Error on creating table for query. ' + str(e))
+
+    def exec_query(self, query_number, parameters):
+        """This is run by the user to query data from the tables.
+        To use it, one has to know the query and its parameters."""
+        query = self._get_query_by_number(query_number)
         try:
-            self.session.execute(QUERY_CREATE_2)
-            self._insert_data(QUERY_INSERT_2, [0, 9, 8, 10, 1, 4, 3])
+            if not isinstance(parameters, tuple): # Handling single-valued tuple
+                parameters = (parameters,)
+            return self.session.execute(query, parameters)
         except Exception as e:
-            print('Error on creating table for query 2. ' + str(e))
+            print('Error on query data. ' + str(e))
 
-    def _model_query_3(self):
-        """ """
-        pass
-
-    def show_query_1(self, session_id, item_in_session):
-        """ """
-        try:
-            rows = self.session.execute(QUERY_SELECT_1, (session_id, item_in_session))
-            print('Query 1 results: \n')
-            for row in rows:
-                print(row.artist, row.song_title, row.song_length)
-        except Exception as e:
-            print('Error on querying data for QUERY 1. ' + str(e))
-
-    def show_query_2(self, user_id, session_id):
-        """ """
-        try:
-            rows = self.session.execute(QUERY_SELECT_2, (user_id, session_id))
-            print('Query 2 results: \n')
-            for row in rows:
-                print(row.artist, row.song_title)
-        except Exception as e:
-            print('Error on querying data for QUERY 2. ' + str(e))
-
-    def show_query_3(self):
-        """ """
-        pass
+    def _get_query_by_number(self, number):
+        """Returns the respective query by its number"""
+        if(number == 1):
+            return QUERY_SELECT_1
+        if(number == 2):
+            return QUERY_SELECT_2
+        if(number == 3):
+            return QUERY_SELECT_3
 
     def _insert_data(self, query, columns):
-        """ """
+        """Inserts data based on a INSERT query and a given set of columns"""
         with open(self.file, encoding='utf8') as f:
             csvreader = csv.reader(f)
             next(csvreader) # skipping header
@@ -74,7 +64,7 @@ class CassandraModel:
                 self.session.execute(query, tuple(map(line.__getitem__, columns)))
 
     def _create_keyspace(self):
-        """ """
+        """Creates the keyspace for storing the data"""
         try:
             self.session.execute("""
                 CREATE KEYSPACE IF NOT EXISTS udacity
@@ -85,16 +75,18 @@ class CassandraModel:
         except Exception as e:
             print('Error on creating keyspace. ' + str(e))
 
-    def _create_cluster(self):
-        """ """
-        return Cluster()
+    def _create_cluster(self, server_instance):
+        """Creates and returns a cluster"""
+        return Cluster([server_instance])
     
     def _open_session(self):
-        """ """
+        """Opens and returns the session on the cluster"""
         return self.cluster.connect()
 
     def close_session(self):
-        """Drops databases and closes session"""
-        self.session.execute(QUERY_DROP_ALL_TABLES)
+        """Drops tables and closes session"""
+        self.session.execute(QUERY_DROP_TABLE_1)
+        self.session.execute(QUERY_DROP_TABLE_2)
+        self.session.execute(QUERY_DROP_TABLE_3)
         self.session.shutdown()
         self.cluster.shutdown()
