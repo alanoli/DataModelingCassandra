@@ -26,8 +26,8 @@ def main():
         return
 
     # Queries data based on the three questions asked
-    cass_db.show_query_1(session_id=338, item_in_session=4)
-    # cass_db.show_query_2()
+    # cass_db.show_query_1(session_id=338, item_in_session=4)
+    cass_db.show_query_2(user_id=10, session_id=182)
     # cass_db.show_query_3()
 
     cass_db.close_session()

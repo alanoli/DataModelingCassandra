@@ -13,7 +13,7 @@ class CassandraModel:
         self.cluster = self._create_cluster()
         self.session = self._open_session()
         self._create_keyspace()
-        self._model_query_1()
+        # self._model_query_1()
         self._model_query_2()
         # self._model_query_3()
 
@@ -41,15 +41,21 @@ class CassandraModel:
         """ """
         try:
             rows = self.session.execute(QUERY_SELECT_1, (session_id, item_in_session))
-            print('Query 1 results')
+            print('Query 1 results: \n')
             for row in rows:
                 print(row.artist, row.song_title, row.song_length)
         except Exception as e:
             print('Error on querying data for QUERY 1. ' + str(e))
 
-    def show_query_2(self):
+    def show_query_2(self, user_id, session_id):
         """ """
-        pass
+        try:
+            rows = self.session.execute(QUERY_SELECT_2, (user_id, session_id))
+            print('Query 2 results: \n')
+            for row in rows:
+                print(row.artist, row.song_title)
+        except Exception as e:
+            print('Error on querying data for QUERY 2. ' + str(e))
 
     def show_query_3(self):
         """ """
@@ -64,6 +70,7 @@ class CassandraModel:
                 line[5] = float(line[5])
                 line[8] = int(line[8])
                 line[3] = int(line[3])
+                line[10] = int(line[10])
                 self.session.execute(query, tuple(map(line.__getitem__, columns)))
 
     def _create_keyspace(self):

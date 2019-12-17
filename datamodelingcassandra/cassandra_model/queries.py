@@ -37,6 +37,9 @@ QUERY_INSERT_1 = """
     VALUES (%s, %s, %s, %s, %s)
 """
 
+# -----------------------------------------------------------------------------------------------
+# 2. Give me only the following: name of artist, song (sorted by itemInSession)
+# and user (first and last name) for userid = 10, sessionid = 182
 QUERY_SELECT_2 = """
     SELECT
         artist
@@ -58,24 +61,27 @@ QUERY_CREATE_2 = """
         ,first_name text
         ,last_name text
         ,item_in_session int
-        ,PRIMARY KEY ((session_id, item_in_session), artist, song_title)
+        ,PRIMARY KEY ((user_id, session_id))
     )
 """
 
 QUERY_INSERT_2 = """
     INSERT INTO music_history_by_user_and_session
     (
-        artist text
-        ,song_title text
-        ,session_id int
-        ,user_id int
-        ,first_name text
-        ,last_name text
-        ,item_in_session int
+        artist
+        ,song_title
+        ,session_id
+        ,user_id
+        ,first_name
+        ,last_name
+        ,item_in_session
     )
     VALUES (%s, %s, %s, %s, %s, %s, %s)
 """
 
+
+# DROPING TABLES
 QUERY_DROP_ALL_TABLES = """
-    DROP TABLE music_history_by_artist_and_song_data
+    DROP TABLE music_history_by_artist_and_song_data;
+    DROP TABLE music_history_by_user_and_session;
 """
