@@ -20,4 +20,13 @@ To get the python modules installed, run:
 ## NoSQL model and queries
 In this project a NoSql modeling approach was used for storing data for later use. As of any Cassandra table modeling, the queries were defined first, then, the table and its model were created for suiting the queries needs.
 
-Three queries are created in this demo project.
+Three queries are created in this demo project and their results shown as following:
+
+    Showing results for query 1:
+    Faithless Music Matters (Mark Knight Dub) 495.3073
+
+    Showing results for query 2:
+    Lonnie Gordon Catch You Baby (Steve Pitron & Max Sanna Radio Edit)
+
+    Showing results for query 3:
+    Kate Harrell
