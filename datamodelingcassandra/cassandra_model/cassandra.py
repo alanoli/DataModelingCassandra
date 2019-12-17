@@ -94,7 +94,7 @@ class CassandraModel:
         return self.cluster.connect()
 
     def close_session(self):
-        """ """
+        """Drops databases and closes session"""
         self.session.execute(QUERY_DROP_ALL_TABLES)
         self.session.shutdown()
         self.cluster.shutdown()
