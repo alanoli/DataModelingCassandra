@@ -1,4 +1,3 @@
-import numpy as np
 from cassandra.cluster import Cluster
 from cassandra_model.queries import *
 import csv
