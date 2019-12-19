@@ -29,7 +29,6 @@ def main():
     try:
         result_1 = cass_db.exec_query(1, (338, 4))
         result_2 = cass_db.exec_query(2, (10, 182))
-        # result_2 = cass_db.exec_query(2, (10, 9)) # teste
         result_3 = cass_db.exec_query(3, ('Pump It'))
 
         print('Showing results for query 1:')
